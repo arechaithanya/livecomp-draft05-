@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f; --bg2: #0f0f1a; --card: #111120; --border: #1e1e30;
+      --accent: #7fff00; --accent-dim: rgba(127,255,0,0.1); --text: #e8e8f0; --muted: #6b6b8a;
+      --font: 'Inter', sans-serif; --pass: #22c55e; --fail: #ef4444;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
+
+    /* NAVBAR */
+    .navbar { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 64px; background: rgba(10,10,15,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-size: 18px; font-weight: 800; text-decoration: none; color: var(--text); }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; cursor: pointer; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .settings-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--muted); transition: color 0.2s; }
+    .settings-btn:hover { color: var(--text); }
+    .avatar-wrap { position: relative; }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: #0a0a0f; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .avatar-dropdown { position: absolute; top: calc(100% + 8px); right: 0; background: var(--card); border: 1px solid var(--border); border-radius: 10px; min-width: 140px; overflow: hidden; display: none; }
+    .avatar-dropdown.open { display: block; }
+    .avatar-dropdown a { display: block; padding: 10px 16px; font-size: 13px; color: var(--muted); text-decoration: none; transition: background 0.2s, color 0.2s; }
+    .avatar-dropdown a:hover { background: var(--bg2); color: var(--text); }
+    .avatar-dropdown .logout { color: #ef4444; }
+
+    /* MAIN */
+    .main { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* GREETING */
+    .greeting { margin-bottom: 40px; }
+    .greeting h1 { font-size: clamp(22px, 3vw, 32px); font-weight: 800; margin-bottom: 8px; }
+    .streak { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,165,0,0.1); border: 1px solid rgba(255,165,0,0.25); color: #ffa500; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+
+    /* SECTION TITLE */
+    .sec-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; margin-top: 40px; }
+    .sec-title span { color: var(--accent); }
+
+    /* QUICK ACTIONS */
+    .quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .qa-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; cursor: pointer; transition: border-color 0.2s, transform 0.2s; display: flex; flex-direction: column; gap: 10px; text-decoration: none; color: var(--text); }
+    .qa-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .qa-top { display: flex; align-items: center; justify-content: space-between; }
+    .qa-icon { font-size: 24px; }
+    .qa-badge { background: var(--accent-dim); color: var(--accent); font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px; }
+    .qa-title { font-size: 15px; font-weight: 700; }
+    .qa-sub { font-size: 13px; color: var(--muted); }
+
+    /* TOOLS GRID */
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+    .tool-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 12px; text-align: center; cursor: pointer; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; text-decoration: none; color: var(--text); }
+    .tool-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(127,255,0,0.08); }
+    .tool-emoji { font-size: 28px; display: block; margin-bottom: 8px; }
+    .tool-name { font-size: 13px; font-weight: 600; }
+
+    /* IDE BANNER */
+    .ide-banner { background: linear-gradient(135deg, #0f1f0f 0%, #0a0f1a 100%); border: 1px solid rgba(127,255,0,0.25); border-radius: 20px; padding: 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; margin-top: 40px; }
+    .ide-banner-left h2 { font-size: clamp(22px, 3vw, 32px); font-weight: 800; margin-bottom: 8px; }
+    .ide-banner-left p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+    .ide-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+    .pill { background: var(--accent-dim); color: var(--accent); font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 20px; }
+    .ide-banner-btn { background: var(--accent); color: #0a0a0f; padding: 14px 32px; border-radius: 10px; font-size: 16px; font-weight: 800; text-decoration: none; transition: opacity 0.2s; white-space: nowrap; }
+    .ide-banner-btn:hover { opacity: 0.85; }
+
+    /* RECENT RUNS */
+    .runs-table { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .run-row { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.15s; text-decoration: none; color: var(--text); }
+    .run-row:last-child { border-bottom: none; }
+    .run-row:hover { background: var(--bg2); }
+    .run-icon { font-size: 20px; width: 28px; text-align: center; flex-shrink: 0; }
+    .run-file { font-size: 14px; font-weight: 600; flex: 1; }
+    .run-lang { font-size: 12px; color: var(--muted); width: 90px; }
+    .run-time { font-size: 12px; color: var(--muted); width: 60px; }
+    .badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .badge.pass { background: rgba(34,197,94,0.1); color: var(--pass); }
+    .badge.fail { background: rgba(239,68,68,0.1); color: var(--fail); }
+
+    /* TOAST */
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+    .toast { background: #1a1a2e; border: 1px solid var(--border); color: var(--text); padding: 12px 18px; border-radius: 10px; font-size: 13px; pointer-events: auto; transform: translateX(120%); animation: slideIn 0.3s forwards; }
+    .toast.out { animation: slideOut 0.3s forwards; }
+    @keyframes slideIn { to { transform: translateX(0); } }
+    @keyframes slideOut { to { transform: translateX(120%); } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo"><span>⬡</span> NEXUS</a>
+  <ul class="nav-links">
+    <li><a onclick="showToast('📁 My Snippets coming soon!')">My Snippets</a></li>
+    <li><a onclick="showToast('🎯 Problems coming soon!')">Problems</a></li>
+    <li><a onclick="showToast('🏆 Leaderboard coming soon!')">Leaderboard</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="settings-btn" onclick="showToast('⚙️ Settings coming soon!')">⚙️</button>
+    <div class="avatar-wrap">
+      <div class="avatar" id="avatarBtn" onclick="toggleAvatarMenu()">D</div>
+      <div class="avatar-dropdown" id="avatarMenu">
+        <a onclick="toggleAvatarMenu(); showToast('👤 Profile coming soon!')">Profile</a>
+        <a onclick="logout()" class="logout">Log Out</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="main">
+  <!-- GREETING -->
+  <div class="greeting">
+    <h1 id="greetingText">Good morning! 👋</h1>
+    <span class="streak" id="streakEl">🔥 1 Day Streak</span>
+  </div>
+
+  <!-- QUICK ACTIONS -->
+  <div class="sec-title">Quick <span>Actions</span></div>
+  <div class="quick-grid">
+    <a href="ide.html" class="qa-card">
+      <div class="qa-top"><span class="qa-icon">📄</span><span class="qa-badge">EDITOR</span></div>
+      <div class="qa-title">New File</div>
+      <div class="qa-sub">Start a fresh coding session</div>
+    </a>
+    <div class="qa-card" onclick="showToast('🎯 Practice problems coming soon!')">
+      <div class="qa-top"><span class="qa-icon">🎯</span><span class="qa-badge">DSA</span></div>
+      <div class="qa-title">Practice Problem</div>
+      <div class="qa-sub">Sharpen your skills</div>
+    </div>
+    <a href="ide.html" class="qa-card">
+      <div class="qa-top"><span class="qa-icon">▶</span><span class="qa-badge">PYTHON</span></div>
+      <div class="qa-title">Resume Last</div>
+      <div class="qa-sub">Continue where you left off</div>
+    </a>
+    <a href="ide.html" class="qa-card">
+      <div class="qa-top"><span class="qa-icon">🔍</span><span class="qa-badge">AI</span></div>
+      <div class="qa-title">Analyze Snippet</div>
+      <div class="qa-sub">Get AI code analysis</div>
+    </a>
+  </div>
+
+  <!-- CODING TOOLS -->
+  <div class="sec-title">Coding Tools <span>&amp; Topics</span></div>
+  <div class="tools-grid">
+    <a href="ide.html" class="tool-card"><span class="tool-emoji">🐍</span><span class="tool-name">Python</span></a>
+    <a href="ide.html" class="tool-card"><span class="tool-emoji">⚡</span><span class="tool-name">C++</span></a>
+    <a href="ide.html" class="tool-card"><span class="tool-emoji">☕</span><span class="tool-name">Java</span></a>
+    <a href="ide.html" class="tool-card"><span class="tool-emoji">🌐</span><span class="tool-name">JavaScript</span></a>
+    <a href="ide.html" class="tool-card"><span class="tool-emoji">📊</span><span class="tool-name">DSA</span></a>
+    <a href="ide.html" class="tool-card"><span class="tool-emoji">🗄️</span><span class="tool-name">SQL</span></a>
+    <a href="ide.html" class="tool-card"><span class="tool-emoji">🦀</span><span class="tool-name">Rust</span></a>
+    <a href="ide.html" class="tool-card"><span class="tool-emoji">🔵</span><span class="tool-name">Go</span></a>
+  </div>
+
+  <!-- IDE LAUNCH BANNER -->
+  <div class="ide-banner">
+    <div class="ide-banner-left">
+      <h2>Open the Live IDE</h2>
+      <p>Write, run, and analyze code in real-time with AI assistance.</p>
+      <div class="ide-pills">
+        <span class="pill">⚡ Live Execution</span>
+        <span class="pill">🤖 AI Analysis</span>
+        <span class="pill">📊 Big-O Estimator</span>
+      </div>
+    </div>
+    <a href="ide.html" class="ide-banner-btn">Launch IDE →</a>
+  </div>
+
+  <!-- RECENT RUNS -->
+  <div class="sec-title">Recent <span>Runs</span></div>
+  <div class="runs-table">
+    <a href="ide.html" class="run-row"><span class="run-icon">🐍</span><span class="run-file">fibonacci.py</span><span class="run-lang">Python</span><span class="run-time">12ms</span><span class="badge pass">✅ Passed</span></a>
+    <a href="ide.html" class="run-row"><span class="run-icon">⚡</span><span class="run-file">sort.cpp</span><span class="run-lang">C++</span><span class="run-time">8ms</span><span class="badge pass">✅ Passed</span></a>
+    <a href="ide.html" class="run-row"><span class="run-icon">☕</span><span class="run-file">BFS.java</span><span class="run-lang">Java</span><span class="run-time">45ms</span><span class="badge fail">❌ Failed</span></a>
+    <a href="ide.html" class="run-row"><span class="run-icon">🌐</span><span class="run-file">twoSum.js</span><span class="run-lang">JavaScript</span><span class="run-time">5ms</span><span class="badge pass">✅ Passed</span></a>
+    <a href="ide.html" class="run-row"><span class="run-icon">📊</span><span class="run-file">dp_knapsack.py</span><span class="run-lang">Python</span><span class="run-time">31ms</span><span class="badge pass">✅ Passed</span></a>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+  // Auth guard
+  let user;
+  try { user = JSON.parse(localStorage.getItem('nexus_user') || ''); } catch(e) { user = null; }
+  if (!user || !user.name) { window.location.href = 'login.html'; }
+
+  // Set greeting
+  const hour = new Date().getHours();
+  const greet = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('greetingText').textContent = greet + ', ' + (user && user.name ? user.name : 'Coder') + '! 👋';
+
+  // Streak
+  const streak = (user && user.streak) ? user.streak : 1;
+  document.getElementById('streakEl').textContent = '🔥 ' + streak + ' Day Streak';
+
+  // Avatar
+  if (user && user.avatar) document.getElementById('avatarBtn').textContent = user.avatar;
+
+  // Avatar dropdown
+  function toggleAvatarMenu() {
+    document.getElementById('avatarMenu').classList.toggle('open');
+  }
+  document.addEventListener('click', e => {
+    const wrap = document.querySelector('.avatar-wrap');
+    if (wrap && !wrap.contains(e.target)) document.getElementById('avatarMenu').classList.remove('open');
+  });
+
+  function logout() {
+    localStorage.removeItem('nexus_user');
+    window.location.href = 'index.html';
+  }
+
+  function showToast(msg) {
+    const c = document.getElementById('toastContainer');
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    c.appendChild(t);
+    setTimeout(() => {
+      t.classList.add('out');
+      t.addEventListener('animationend', () => t.remove());
+    }, 3000);
+  }
+</script>
+</body>
+</html>
