@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS — Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f; --bg2: #0f0f1a; --card: #111120; --border: #1e1e30;
+      --accent: #7fff00; --text: #e8e8f0; --muted: #6b6b8a; --font: 'Inter', sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; }
+    body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 20%, rgba(127,255,0,0.05), transparent 70%); pointer-events: none; }
+
+    .back-btn { position: fixed; top: 24px; left: 24px; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
+    .back-btn:hover { color: var(--text); }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 40px; width: 100%; max-width: 420px; margin: 24px; }
+
+    .logo { font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 6px; }
+    .logo span { color: var(--accent); }
+    .tagline { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 32px; }
+
+    .oauth-btn { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg2); color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: border-color 0.2s, background 0.2s; margin-bottom: 12px; }
+    .oauth-btn:hover { border-color: var(--accent); background: rgba(127,255,0,0.04); }
+    .oauth-icon { font-size: 18px; }
+
+    .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--muted); font-size: 12px; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--muted); }
+    .field input { width: 100%; padding: 11px 14px; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; font-family: var(--font); outline: none; transition: border-color 0.2s; }
+    .field input:focus { border-color: var(--accent); }
+    .pw-wrap { position: relative; }
+    .pw-wrap input { padding-right: 44px; }
+    .pw-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); font-size: 16px; padding: 4px; }
+    .pw-toggle:hover { color: var(--text); }
+
+    .forgot { display: block; text-align: right; font-size: 12px; color: var(--muted); text-decoration: none; margin-top: -8px; margin-bottom: 20px; }
+    .forgot:hover { color: var(--accent); }
+
+    .submit-btn { width: 100%; padding: 13px; background: var(--accent); color: #0a0a0f; font-size: 15px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; transition: opacity 0.2s; }
+    .submit-btn:hover { opacity: 0.85; }
+
+    .signup-link { text-align: center; margin-top: 20px; font-size: 13px; color: var(--muted); }
+    .signup-link a { color: var(--accent); text-decoration: none; font-weight: 600; }
+    .signup-link a:hover { text-decoration: underline; }
+
+    .error-msg { background: rgba(255,80,80,0.1); border: 1px solid rgba(255,80,80,0.3); color: #ff8080; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
+
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+    .toast { background: #1a1a2e; border: 1px solid var(--border); color: var(--text); padding: 12px 18px; border-radius: 10px; font-size: 13px; transform: translateX(120%); animation: slideIn 0.3s forwards; }
+    .toast.out { animation: slideOut 0.3s forwards; }
+    @keyframes slideIn { to { transform: translateX(0); } }
+    @keyframes slideOut { to { transform: translateX(120%); } }
+  </style>
+</head>
+<body>
+
+<a href="index.html" class="back-btn">← Back</a>
+
+<div class="card">
+  <div class="logo"><span>⬡</span> NEXUS</div>
+  <p class="tagline">Code. Compile. Understand.</p>
+
+  <button class="oauth-btn" onclick="oauthLogin('Google')">
+    <span class="oauth-icon">🔵</span> Continue with Google
+  </button>
+  <button class="oauth-btn" onclick="oauthLogin('GitHub')">
+    <span class="oauth-icon">⚫</span> Continue with GitHub
+  </button>
+
+  <div class="divider">or</div>
+
+  <div id="errorMsg" class="error-msg"></div>
+
+  <div class="field">
+    <label for="emailInput">Email address</label>
+    <input type="email" id="emailInput" placeholder="you@example.com" autocomplete="email">
+  </div>
+  <div class="field">
+    <label for="pwInput">Password</label>
+    <div class="pw-wrap">
+      <input type="password" id="pwInput" placeholder="••••••••" autocomplete="current-password">
+      <button class="pw-toggle" id="pwToggle" onclick="togglePw()" aria-label="Show password" aria-pressed="false">👁</button>
+    </div>
+  </div>
+
+  <a href="#" class="forgot" onclick="showToast('🔑 Password reset coming soon!')">Forgot password?</a>
+
+  <button class="submit-btn" onclick="emailLogin()">Sign In →</button>
+
+  <p class="signup-link">No account? <a href="#" onclick="showToast('🚀 Sign up coming soon! Use OAuth for now.')">Create one free</a></p>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+  function doLogin(name, email) {
+    const streak = Math.floor(Math.random() * 30) + 1;
+    localStorage.setItem('nexus_user', JSON.stringify({ name, email, avatar: name.charAt(0).toUpperCase(), streak }));
+    window.location.href = 'dashboard.html';
+  }
+
+  function oauthLogin(provider) {
+    showToast('🔐 Connecting to ' + provider + '...');
+    setTimeout(() => doLogin('Dev User', 'dev@example.com'), 800);
+  }
+
+  function emailLogin() {
+    const email = document.getElementById('emailInput').value.trim();
+    const pw = document.getElementById('pwInput').value;
+    const err = document.getElementById('errorMsg');
+    if (!email || !pw) {
+      err.textContent = 'Please enter your email and password.';
+      err.style.display = 'block';
+      return;
+    }
+    err.style.display = 'none';
+    showToast('✅ Signing in...');
+    const name = email.split('@')[0].replace(/[^a-zA-Z0-9]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    setTimeout(() => doLogin(name, email), 600);
+  }
+
+  function togglePw() {
+    const inp = document.getElementById('pwInput');
+    const btn = document.getElementById('pwToggle');
+    const show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password';
+    btn.setAttribute('aria-pressed', String(show));
+    btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+  }
+
+  function showToast(msg) {
+    const c = document.getElementById('toastContainer');
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    c.appendChild(t);
+    setTimeout(() => {
+      t.classList.add('out');
+      t.addEventListener('animationend', () => t.remove());
+    }, 3000);
+  }
+</script>
+</body>
+</html>

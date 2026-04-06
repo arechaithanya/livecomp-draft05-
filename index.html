@@ -3,301 +3,327 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="NEXUS IDE — AI-Powered Live Compiler & Learning Platform for programming education">
-  <title>NEXUS IDE — AI-Powered Compiler</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://js.puter.com/v2/"></script>
+  <title>NEXUS — Code. Compile. Understand.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #0f0f1a;
+      --card: #111120;
+      --border: #1e1e30;
+      --accent: #7fff00;
+      --accent-dim: rgba(127,255,0,0.12);
+      --text: #e8e8f0;
+      --muted: #6b6b8a;
+      --font: 'Inter', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.6; overflow-x: hidden; }
+
+    /* NAV */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 64px;
+      background: rgba(10,10,15,0.8); backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+    .navbar.scrolled { border-bottom-color: var(--border); }
+    .nav-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; text-decoration: none; color: var(--text); }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-actions { display: flex; gap: 12px; align-items: center; }
+    .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-fill { background: var(--accent); color: #0a0a0f; padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; border: none; transition: opacity 0.2s; }
+    .btn-fill:hover { opacity: 0.85; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 120px 24px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 30%, rgba(127,255,0,0.06), transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; opacity: 0; animation: fadeUp 0.6s 0.1s forwards; }
+    .hero-title { font-size: clamp(48px, 8vw, 96px); font-weight: 800; line-height: 1.05; letter-spacing: -2px; margin-bottom: 24px; }
+    .hero-title .line1 { display: block; opacity: 0; animation: fadeUp 0.7s 0.25s forwards; }
+    .hero-title .line2 { display: block; opacity: 0; animation: fadeUp 0.7s 0.45s forwards; color: var(--accent); }
+    .hero-sub { font-size: 18px; color: var(--muted); max-width: 540px; margin: 0 auto 40px; opacity: 0; animation: fadeUp 0.7s 0.65s forwards; }
+    .hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.7s 0.8s forwards; }
+    .btn-large { padding: 14px 32px; font-size: 16px; border-radius: 10px; font-weight: 700; }
+    @keyframes fadeUp { from { opacity:0; transform: translateY(24px); } to { opacity:1; transform: translateY(0); } }
+
+    /* MARQUEE TICKER */
+    .ticker-wrap { width: 100%; overflow: hidden; background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 14px 0; }
+    .ticker-track { display: flex; gap: 64px; width: max-content; animation: marquee 28s linear infinite; }
+    .ticker-item { font-family: var(--mono); font-size: 13px; color: var(--accent); white-space: nowrap; opacity: 0.8; }
+    .ticker-dot { color: var(--muted); }
+    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* SECTION */
+    .section { padding: 100px 24px; max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 12px; }
+    .section-title { font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -1px; margin-bottom: 48px; }
+    .section-title span { color: var(--accent); }
+
+    /* FEATURES GRID */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+    .feat-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 28px; cursor: default; transition: border-color 0.3s, transform 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .feat-card::before {
+      content: ''; position: absolute; inset: 0; border-radius: 16px;
+      background: radial-gradient(circle at var(--gx,50%) var(--gy,50%), rgba(127,255,0,0.1), transparent 60%);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .feat-card:hover::before { opacity: 1; }
+    .feat-card:hover { border-color: rgba(127,255,0,0.35); transform: translateY(-2px); }
+    .feat-icon { font-size: 28px; margin-bottom: 16px; }
+    .feat-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .feat-desc { font-size: 14px; color: var(--muted); line-height: 1.5; }
+
+    /* LANGUAGE GRID */
+    .lang-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
+    .lang-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px 16px; text-align: center; cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      text-decoration: none; color: var(--text);
+    }
+    .lang-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 32px rgba(127,255,0,0.1); }
+    .lang-emoji { font-size: 32px; display: block; margin-bottom: 10px; }
+    .lang-name { font-size: 14px; font-weight: 600; }
+
+    /* IDE TEASER */
+    .teaser-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+    .teaser-header { background: #0a0a14; padding: 12px 20px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+    .teaser-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .teaser-dot.red { background: #ff5f56; }
+    .teaser-dot.yellow { background: #ffbd2e; }
+    .teaser-dot.green { background: #27c93f; }
+    .teaser-filename { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-left: 8px; }
+    .teaser-code { padding: 28px 28px 20px; font-family: var(--mono); font-size: 13px; line-height: 1.8; }
+    .tk { color: #569cd6; } .ts { color: #ce9178; } .tf { color: #dcdcaa; } .tc { color: #6a9955; } .tn { color: #b5cea8; }
+    .teaser-cta { background: rgba(127,255,0,0.06); border-top: 1px solid var(--border); padding: 20px 28px; display: flex; align-items: center; justify-content: space-between; }
+    .teaser-cta-text { font-size: 14px; color: var(--muted); }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 48px 32px; max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: gap; gap: 24px; }
+    .footer-logo { font-size: 18px; font-weight: 800; }
+    .footer-logo span { color: var(--accent); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { color: var(--muted); font-size: 12px; }
+
+    /* TOAST */
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+    .toast { background: #1a1a2e; border: 1px solid var(--border); color: var(--text); padding: 12px 18px; border-radius: 10px; font-size: 13px; pointer-events: auto; transform: translateX(120%); animation: slideIn 0.3s forwards; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+    .toast.out { animation: slideOut 0.3s forwards; }
+    @keyframes slideIn { to { transform: translateX(0); } }
+    @keyframes slideOut { to { transform: translateX(120%); } }
+  </style>
 </head>
 <body>
 
-<div id="app">
-  <!-- ═══ TOPBAR (fixed) ═══ -->
-  <header class="topbar" id="topbar">
-    <div class="topbar-left">
-      <div class="logo"><span>⬡</span>NEXUS</div>
-      <div class="lang-selector">
-        <button class="lang-btn" id="langBtn" onclick="toggleLangDropdown()">
-          <span class="lang-dot" id="langDot"></span>
-          <span id="langName">Python</span>
-          <span style="font-size:10px;color:var(--text-muted)">▾</span>
-        </button>
-        <div class="lang-dropdown" id="langDropdown"></div>
-      </div>
-    </div>
-    <div class="topbar-center">
-      <button class="btn btn-run" id="runBtn" onclick="runCode()">▶ Run</button>
-      <button class="btn" id="dryRunBtn" onclick="dryRunCode()">🔍 Dry Run</button>
-      <button class="btn" id="stepBtn" onclick="stepDryRun()">⏭ Step</button>
-      <button class="btn" onclick="resetAll()">↺ Reset</button>
-    </div>
-    <div class="topbar-right">
-      <button class="btn-icon" onclick="openApiKeyModal()" title="Settings">⚙</button>
-    </div>
-  </header>
-
-  <!-- ═══ MAIN SCROLLABLE AREA ═══ -->
-  <div class="page-body" id="mainContent">
-    <!-- ═══ TWO-COLUMN SECTION ═══ -->
-    <div class="columns-section">
-      <!-- LEFT COLUMN -->
-      <div class="column left-column" id="leftColumn">
-        <!-- Code Editor -->
-        <div class="panel editor-panel">
-          <div class="panel-header">
-            <div class="panel-title">
-              <span class="panel-title-icon">✦</span> CODE EDITOR
-            </div>
-          </div>
-          <div class="editor-container">
-            <div id="editor"></div>
-          </div>
-        </div>
-
-        <!-- Input Panel -->
-        <div class="panel" id="leftInputPanel">
-          <div class="panel-header">
-            <div class="panel-title"><span class="panel-title-icon">📥</span> INPUT</div>
-          </div>
-          <div class="panel-body">
-            <textarea class="input-textarea" id="stdinInput" placeholder="Enter input for your program (stdin)..." rows="5"></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- COLUMN DIVIDER -->
-      <div class="column-divider"></div>
-
-      <!-- RIGHT COLUMN -->
-      <div class="column right-column" id="rightColumn">
-        <!-- Right Column Tab Bar -->
-        <div class="right-tabs">
-          <button class="right-tab active" id="tabOutput" onclick="switchRightTab('output')">⚡ Output</button>
-          <button class="right-tab" id="tabExplain" onclick="switchRightTab('explain')">🤖 Explain</button>
-          <button class="right-tab" id="tabComplexity" onclick="switchRightTab('complexity')">📊 Complexity</button>
-          <button class="right-tab" id="tabDryRun" onclick="switchRightTab('dryrun')">🔍 Dry Run</button>
-        </div>
-
-        <!-- Output Tab -->
-        <div class="right-tab-content active" id="panelOutput">
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">
-                <span class="panel-title-icon">⚡</span> COMPILER OUTPUT
-                <span class="panel-badge" id="execTimeBadge">0.00s</span>
-              </div>
-            </div>
-            <div class="panel-body">
-              <div id="outputContent">
-                <div class="empty-state">
-                  <div class="empty-state-icon">⚡</div>
-                  <div>Click <strong>▶ Run</strong> to execute your code</div>
-                </div>
-              </div>
-              <div class="exec-stats" id="execStats" style="display:none">
-                <div class="exec-stat">⏱ Time: <span id="statTime">0.000s</span></div>
-                <div class="exec-stat">🧠 Memory: <span id="statMem">0.0 MB</span></div>
-                <div class="exec-stat">✓ Exit: <span id="statExit">0</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Explain Tab -->
-        <div class="right-tab-content" id="panelExplain">
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">
-                <span class="panel-title-icon">🤖</span>
-                <span class="ai-header-text">AI ANALYSIS</span>
-              </div>
-            </div>
-            <div class="panel-body">
-              <div id="aiContent">
-                <div class="ai-success-card">
-                  <div class="ai-success-icon">✨</div>
-                  <div style="font-weight:600;margin-bottom:4px;">Write some code to get started</div>
-                  <div style="font-size:12px;color:var(--text-secondary);">AI analysis will appear here after you run your code</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Complexity Tab -->
-        <div class="right-tab-content" id="panelComplexity">
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title"><span class="panel-title-icon">📊</span> COMPLEXITY ANALYSIS</div>
-            </div>
-            <div class="panel-body">
-              <div id="complexityContent">
-                <div class="empty-state">
-                  <div class="empty-state-icon">📊</div>
-                  <div>Click <strong>📊 Complexity</strong> tab to analyze your code</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Dry Run Tab -->
-        <div class="right-tab-content" id="panelDryRun">
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title"><span class="panel-title-icon">🔍</span> DRY RUN TRACE</div>
-            </div>
-            <div class="panel-body">
-              <div id="dryRunContent">
-                <div class="empty-state">
-                  <div class="empty-state-icon">🔍</div>
-                  <div>Click <strong>🔍 Dry Run</strong> in the topbar to trace execution</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══ SECTION DIVIDER ═══ -->
-    <div class="section-divider"></div>
-
-    <!-- ═══ FULL-WIDTH: ALGORITHM VISUALIZER ═══ -->
-    <section class="full-width-section viz-section" id="vizSection">
-      <div class="section-header">
-        <span class="section-header-icon">🎬</span> ALGORITHM VISUALIZER
-      </div>
-      <div class="viz-tabs">
-        <button class="tab-btn active" onclick="switchVizTab(this,'vizArray')">Array</button>
-        <button class="tab-btn" onclick="switchVizTab(this,'vizLinked')">Linked List</button>
-        <button class="tab-btn" onclick="switchVizTab(this,'vizTree')">Tree</button>
-        <button class="tab-btn" onclick="switchVizTab(this,'vizGraph')">Graph</button>
-        <button class="tab-btn" onclick="switchVizTab(this,'vizRecursion')">Recursion</button>
-      </div>
-      <div class="viz-canvas-wrapper">
-        <div class="tab-content active" id="vizArray">
-          <div class="viz-canvas" id="arrayVizCanvas"></div>
-        </div>
-        <div class="tab-content" id="vizLinked">
-          <div class="viz-canvas" id="linkedVizCanvas"></div>
-        </div>
-        <div class="tab-content" id="vizTree">
-          <div class="viz-canvas" id="treeVizCanvas"></div>
-        </div>
-        <div class="tab-content" id="vizGraph">
-          <div class="viz-canvas" id="graphVizCanvas"></div>
-        </div>
-        <div class="tab-content" id="vizRecursion">
-          <div class="viz-canvas" id="recursionVizCanvas"></div>
-        </div>
-      </div>
-      <div class="viz-controls">
-        <button class="viz-ctrl-btn" onclick="vizGoStart()">|◀</button>
-        <button class="viz-ctrl-btn" onclick="vizPrev()">◀</button>
-        <button class="viz-ctrl-btn play-btn" id="vizPlayBtn" onclick="vizTogglePlay()">▶ Play</button>
-        <button class="viz-ctrl-btn" onclick="vizNext()">▶|</button>
-        <button class="viz-ctrl-btn" onclick="vizGoEnd()">▶|</button>
-        <div class="speed-slider">
-          <span>Slow</span>
-          <input type="range" min="100" max="1500" value="500" id="vizSpeed">
-          <span>Fast</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ SECTION DIVIDER ═══ -->
-    <div class="section-divider"></div>
-
-    <!-- ═══ FULL-WIDTH: LEARNING ANALYTICS ═══ -->
-    <section class="full-width-section analytics-section" id="analyticsSection">
-      <div class="section-header">
-        <span class="section-header-icon">📊</span> LEARNING ANALYTICS
-        <button class="btn" style="margin-left:auto;font-size:11px;" onclick="resetAnalytics()">↺ Reset Stats</button>
-      </div>
-      <div class="analytics-grid">
-        <!-- Error Frequency (dynamic) -->
-        <div class="analytics-card">
-          <div class="analytics-card-title">Error Frequency</div>
-          <div class="bar-chart" id="errorChart">
-            <div class="empty-state" style="min-height:120px;padding:16px;">
-              <div class="empty-state-icon" style="font-size:24px;">📊</div>
-              <div style="font-size:12px;color:var(--text-muted);">No errors tracked yet</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Session Stats (dynamic) -->
-        <div class="analytics-card">
-          <div class="analytics-card-title">Session Stats</div>
-          <div class="stat-grid">
-            <div class="stat-card"><div class="stat-value" id="statRuns">0</div><div class="stat-label">Runs</div></div>
-            <div class="stat-card"><div class="stat-value" id="statErrors">0</div><div class="stat-label">Errors</div></div>
-            <div class="stat-card"><div class="stat-value" id="statSuccessRate">—</div><div class="stat-label">Success %</div></div>
-            <div class="stat-card"><div class="stat-value" id="statAlgos">0</div><div class="stat-label">Analyzed</div></div>
-          </div>
-          <div class="analytics-card-title" style="margin-top:16px;">Languages Used</div>
-          <div id="langUsageChart" style="margin-top:8px;">
-            <div style="color:var(--text-muted);font-size:12px;">No runs yet</div>
-          </div>
-        </div>
-
-        <!-- Weak Areas & Practice (dynamic) -->
-        <div class="analytics-card">
-          <div class="analytics-card-title">Weak Areas</div>
-          <div id="weakAreasContainer" style="margin-bottom:16px;">
-            <div style="color:var(--text-muted);font-size:12px;">Run some code to detect weak areas</div>
-          </div>
-          <div class="analytics-card-title" style="margin-top:16px;">Recommended Practice</div>
-          <div id="practiceContainer">
-            <div style="color:var(--text-muted);font-size:12px;">Practice suggestions appear based on your errors</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Bottom spacer for status bar -->
-    <div style="height:28px;"></div>
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="nav-logo"><span>⬡</span> NEXUS</a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#languages">Languages</a></li>
+    <li><a href="#docs" onclick="showToast('📚 Docs coming soon!')">Docs</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="login.html" class="btn-ghost">Sign In</a>
+    <a href="login.html" class="btn-fill">Get Started →</a>
   </div>
+</nav>
 
-  <!-- ═══ STATUS BAR (fixed bottom) ═══ -->
-  <footer class="status-bar" id="statusBar">
-    <div class="status-bar-section">
-      <span class="status-item" style="color:var(--accent-cyan);font-weight:600;">⬡ NEXUS</span>
-      <span class="status-item" id="statusLang">Python 3</span>
-      <span class="status-item">UTF-8</span>
-    </div>
-    <div class="status-bar-section">
-      <span class="status-item" id="statusCursor">Ln 1, Col 1</span>
-    </div>
-    <div class="status-bar-section">
-      <span class="status-item" id="statusTime">⏱ 0.000s</span>
-      <span class="status-item" id="statusMem">🧠 0.0MB</span>
-      <span class="status-item status-state" id="statusState"><span class="status-dot"></span> Ready</span>
-    </div>
-  </footer>
+<!-- HERO -->
+<section class="hero" id="hero">
+  <p class="hero-eyebrow">AI-Powered Code Platform</p>
+  <h1 class="hero-title">
+    <span class="line1">Code Smarter.</span>
+    <span class="line2">Ship Faster.</span>
+  </h1>
+  <p class="hero-sub">AI-powered live compiler with complexity analysis, dry-run tracing, and competitive coding tools.</p>
+  <div class="hero-ctas">
+    <a href="login.html" class="btn-fill btn-large">Start Coding Free →</a>
+    <a href="ide.html" class="btn-ghost btn-large">Try the IDE →</a>
+  </div>
+</section>
+
+<!-- MARQUEE TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="ticker">
+    <span class="ticker-item">def fibonacci(n):</span>
+    <span class="ticker-dot">◆</span>
+    <span class="ticker-item">int main() {</span>
+    <span class="ticker-dot">◆</span>
+    <span class="ticker-item">SELECT * FROM users WHERE active = 1</span>
+    <span class="ticker-dot">◆</span>
+    <span class="ticker-item">const solve = (n) => n &lt;= 1 ? n : solve(n-1) + solve(n-2)</span>
+    <span class="ticker-dot">◆</span>
+    <span class="ticker-item">for i in range(len(arr)):</span>
+    <span class="ticker-dot">◆</span>
+    <span class="ticker-item">vector&lt;int&gt; dp(n+1, 0);</span>
+    <span class="ticker-dot">◆</span>
+    <span class="ticker-item">public static void main(String[] args) {</span>
+    <span class="ticker-dot">◆</span>
+    <span class="ticker-item">fn main() { println!("Hello, world!"); }</span>
+    <span class="ticker-dot">◆</span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item">def fibonacci(n):</span>
+    <span class="ticker-dot">◆</span>
+    <span class="ticker-item">int main() {</span>
+    <span class="ticker-dot">◆</span>
+    <span class="ticker-item">SELECT * FROM users WHERE active = 1</span>
+    <span class="ticker-dot">◆</span>
+    <span class="ticker-item">const solve = (n) => n &lt;= 1 ? n : solve(n-1) + solve(n-2)</span>
+    <span class="ticker-dot">◆</span>
+    <span class="ticker-item">for i in range(len(arr)):</span>
+    <span class="ticker-dot">◆</span>
+    <span class="ticker-item">vector&lt;int&gt; dp(n+1, 0);</span>
+    <span class="ticker-dot">◆</span>
+    <span class="ticker-item">public static void main(String[] args) {</span>
+    <span class="ticker-dot">◆</span>
+    <span class="ticker-item">fn main() { println!("Hello, world!"); }</span>
+    <span class="ticker-dot">◆</span>
+  </div>
 </div>
 
-<!-- ═══ API KEY MODAL ═══ -->
-<div class="modal-overlay" id="apiKeyModal">
-  <div class="modal">
-    <div class="modal-title">🔑 API Key Settings</div>
-    <div class="modal-desc">Enter your RapidAPI key to enable real code execution. AI features are powered by Puter.js (free, no key needed).</div>
-    <div class="modal-field">
-      <label class="modal-label">RapidAPI Key (Judge0 CE)</label>
-      <input type="password" id="rapidApiKeyInput" placeholder="Your RapidAPI key...">
-    </div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeApiKeyModal()">Cancel</button>
-      <button class="btn" onclick="clearApiKeys()" style="color:var(--accent-red);">Clear Key</button>
-      <button class="btn btn-run" onclick="saveApiKeys()">Save</button>
+<!-- FEATURES -->
+<div id="features">
+  <div class="section">
+    <p class="section-label">Why NEXUS</p>
+    <h2 class="section-title">Everything you need to <span>code better</span></h2>
+    <div class="features-grid" id="featGrid">
+      <div class="feat-card">
+        <div class="feat-icon">⚡</div>
+        <div class="feat-title">Live Execution</div>
+        <div class="feat-desc">Run code in 10+ languages instantly with real-time output and stdin support.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🤖</div>
+        <div class="feat-title">AI Analyzer</div>
+        <div class="feat-desc">Get AI-powered suggestions, Big-O complexity estimates, and code explanations.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🏆</div>
+        <div class="feat-title">Competitive Mode</div>
+        <div class="feat-desc">Solve problems, track your streak, and climb the leaderboard against peers.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔗</div>
+        <div class="feat-title">Share Snippets</div>
+        <div class="feat-desc">Share your code with a single link — no login required for viewers.</div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ═══ CDN SCRIPTS ═══ -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.js"></script>
-<script src="app.js"></script>
-<script src="app2.js"></script>
+<!-- LANGUAGES -->
+<div id="languages">
+  <div class="section">
+    <p class="section-label">Languages &amp; Topics</p>
+    <h2 class="section-title">Pick your <span>language</span></h2>
+    <div class="lang-grid">
+      <a href="login.html" class="lang-card"><span class="lang-emoji">🐍</span><span class="lang-name">Python</span></a>
+      <a href="login.html" class="lang-card"><span class="lang-emoji">⚡</span><span class="lang-name">C++</span></a>
+      <a href="login.html" class="lang-card"><span class="lang-emoji">☕</span><span class="lang-name">Java</span></a>
+      <a href="login.html" class="lang-card"><span class="lang-emoji">🌐</span><span class="lang-name">JavaScript</span></a>
+      <a href="login.html" class="lang-card"><span class="lang-emoji">📊</span><span class="lang-name">DSA</span></a>
+      <a href="login.html" class="lang-card"><span class="lang-emoji">🗄️</span><span class="lang-name">SQL</span></a>
+    </div>
+  </div>
+</div>
 
+<!-- IDE TEASER -->
+<div class="section" id="docs">
+  <p class="section-label">IDE Preview</p>
+  <h2 class="section-title">A real <span>IDE experience</span> in your browser</h2>
+  <div class="teaser-wrap">
+    <div class="teaser-header">
+      <span class="teaser-dot red"></span>
+      <span class="teaser-dot yellow"></span>
+      <span class="teaser-dot green"></span>
+      <span class="teaser-filename">fibonacci.py</span>
+    </div>
+    <div class="teaser-code">
+      <div><span class="tk">def</span> <span class="tf">fibonacci</span>(<span class="tn">n</span>):</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tc"># Dynamic programming approach</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tk">if</span> n &lt;= <span class="tn">1</span>:</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tk">return</span> n</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;dp = [<span class="tn">0</span>] * (n + <span class="tn">1</span>)</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;dp[<span class="tn">1</span>] = <span class="tn">1</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tk">for</span> i <span class="tk">in</span> <span class="tf">range</span>(<span class="tn">2</span>, n + <span class="tn">1</span>):</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp[i] = dp[i-<span class="tn">1</span>] + dp[i-<span class="tn">2</span>]</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tk">return</span> dp[n]</div>
+      <div></div>
+      <div><span class="tf">print</span>(<span class="ts">"Result:"</span>, <span class="tf">fibonacci</span>(<span class="tn">10</span>))</div>
+    </div>
+    <div class="teaser-cta">
+      <span class="teaser-cta-text">⚡ Run this code live — AI analysis, complexity estimates, and more.</span>
+      <a href="ide.html" class="btn-fill">Open the IDE →</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>⬡</span> NEXUS</div>
+  <div class="footer-links">
+    <a href="#features">Features</a>
+    <a href="#languages">Languages</a>
+    <a href="#docs" onclick="showToast('📚 Docs coming soon!')">Docs</a>
+    <a href="#" onclick="showToast('🔒 Privacy policy coming soon!')">Privacy</a>
+  </div>
+  <span class="footer-copy">© 2025 NEXUS</span>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+  // Navbar scroll effect
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Mouse-tracking glow on feature cards
+  document.querySelectorAll('.feat-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--gx', ((e.clientX - r.left) / r.width * 100) + '%');
+      card.style.setProperty('--gy', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+  });
+
+  // Toast
+  function showToast(msg) {
+    const c = document.getElementById('toastContainer');
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    c.appendChild(t);
+    setTimeout(() => {
+      t.classList.add('out');
+      t.addEventListener('animationend', () => t.remove());
+    }, 3000);
+  }
+</script>
 </body>
 </html>
