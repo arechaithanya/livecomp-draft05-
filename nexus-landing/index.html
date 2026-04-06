@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Code. Compile. Understand.</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ══════════════════════════════════════
+         FIXED NAV
+    ══════════════════════════════════════ -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+
+            <div class="nav-left">
+                <a href="#hero" class="logo-link" id="logoLink">
+                    <span class="logo-text">NEXUS</span>
+                    <span class="logo-dot"></span>
+                </a>
+            </div>
+
+            <div class="nav-center">
+                <a href="#hero" class="nav-link nav-item" data-target="hero">Home</a>
+                <a href="#features" class="nav-link nav-item" data-target="features">Features</a>
+                <a href="#languages" class="nav-link nav-item" data-target="languages">Languages</a>
+                <a href="#" class="nav-link nav-item compiler-link" id="navCompilerBtn">
+                    <span class="compiler-glow-dot"></span>Compiler
+                </a>
+                <a href="#pricing" class="nav-link nav-item" data-target="pricing">Pricing</a>
+            </div>
+
+            <!-- Auth area — swapped to avatar after login -->
+            <div class="nav-right" id="navAuthArea">
+                <button class="btn-ghost" id="navLoginBtn">Log In</button>
+                <button class="btn-primary" id="navSignUpBtn">Sign Up &rarr;</button>
+            </div>
+
+        </div>
+    </nav>
+
+
+    <!-- ══════════════════════════════════════
+         HERO — fullscreen video, nothing covers it
+    ══════════════════════════════════════ -->
+    <section class="hero" id="hero">
+
+        <!-- Raw video — no overlay div on top -->
+        <video class="bg-video" autoplay loop muted playsinline>
+            <source
+                src="https://assets.mixkit.co/videos/preview/mixkit-software-developer-working-on-code-across-multiple-screens-43516-large.mp4"
+                type="video/mp4">
+        </video>
+
+        <!-- Headline floats directly over the video -->
+        <div class="hero-content">
+            <h1 class="hero-title">Code. Compile.<br><em>Understand.</em></h1>
+            <p class="hero-subtitle">AI-powered compiler with real-time error analysis,<br>dry run tracing, and
+                complexity insight</p>
+            <div class="hero-ctas">
+                <a href="#" class="btn-primary btn-large" id="heroOpenIDE">Open IDE &rarr;</a>
+                <a href="#how-it-works" class="btn-ghost btn-large">See how it works</a>
+            </div>
+        </div>
+
+        <!-- Frosted glass stat chips at the four corners -->
+        <div class="stat-chip stat-top-left">
+            <span class="stat-label">Support</span>
+            <span class="stat-value">10+ Languages</span>
+        </div>
+        <div class="stat-chip stat-top-right">
+            <span class="stat-label">Latency</span>
+            <span class="stat-value">~0ms</span>
+        </div>
+        <div class="stat-chip stat-bottom-left">
+            <span class="stat-label">Smart</span>
+            <span class="stat-value">AI Error Fix</span>
+        </div>
+        <div class="stat-chip stat-bottom-right">
+            <span class="stat-label">Trace</span>
+            <span class="stat-value">Live Dry Run</span>
+        </div>
+
+    </section>
+
+
+    <!-- ══════════════════════════════════════
+         LANGUAGES MARQUEE STRIP
+    ══════════════════════════════════════ -->
+    <section class="languages-strip" id="languages">
+        <div class="marquee-wrapper">
+            <!-- Two identical sets for seamless loop -->
+            <div class="marquee-content">
+                <div class="lang-pill"><span class="lang-dot" style="background:#f34b7d"></span>C++</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#3572A5"></span>Python</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#b07219"></span>Java</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#00add8"></span>Go</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#dea584"></span>Rust</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#F18E33"></span>Kotlin</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#555"></span>C</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#701516"></span>Ruby</div>
+            </div>
+            <div class="marquee-content" aria-hidden="true">
+                <div class="lang-pill"><span class="lang-dot" style="background:#f34b7d"></span>C++</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#3572A5"></span>Python</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#b07219"></span>Java</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#00add8"></span>Go</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#dea584"></span>Rust</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#F18E33"></span>Kotlin</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#555"></span>C</div>
+                <div class="lang-pill"><span class="lang-dot" style="background:#701516"></span>Ruby</div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════
+         FEATURES
+    ══════════════════════════════════════ -->
+    <section class="features" id="features">
+        <div class="section-container">
+            <h2 class="section-title">Everything your compiler was missing</h2>
+            <div class="features-grid">
+                <div class="feature-card fade-up">
+                    <div class="feature-icon">🔍</div>
+                    <h3 class="feature-title">AI Error Explanation</h3>
+                    <p class="feature-desc">Get clear, human-readable explanations directly beneath the terminal.</p>
+                </div>
+                <div class="feature-card fade-up">
+                    <div class="feature-icon">⏱️</div>
+                    <h3 class="feature-title">Time Complexity Analyzer</h3>
+                    <p class="feature-desc">Real-time Big O analysis evaluating memory and runtime overhead.</p>
+                </div>
+                <div class="feature-card fade-up">
+                    <div class="feature-icon">📋</div>
+                    <h3 class="feature-title">Line-by-Line Dry Run</h3>
+                    <p class="feature-desc">Visually trace variable state changes through iterative execution steps.</p>
+                </div>
+                <div class="feature-card fade-up">
+                    <div class="feature-icon">🌍</div>
+                    <h3 class="feature-title">Multi-Language Support</h3>
+                    <p class="feature-desc">Write, switch, and compile across 10+ modern programming languages
+                        instantly.</p>
+                </div>
+                <div class="feature-card fade-up">
+                    <div class="feature-icon">💬</div>
+                    <h3 class="feature-title">Live stdin Input</h3>
+                    <p class="feature-desc">Interactive terminal execution allowing continuous standard inputs.</p>
+                </div>
+                <div class="feature-card fade-up">
+                    <div class="feature-icon">⏯️</div>
+                    <h3 class="feature-title">Step-Through Execution</h3>
+                    <p class="feature-desc">Pause, inspect, and step forward natively inside the browser IDE.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════
+         AI SEARCH BAR + TYPEWRITER
+    ══════════════════════════════════════ -->
+    <section class="ai-search" id="ai-search">
+        <div class="section-container">
+            <h2 class="section-title text-center">Ask anything about your code</h2>
+            <div class="search-container fade-up">
+                <div class="search-bar">
+                    <span class="search-icon">✨</span>
+                    <input type="text" id="typewriter" class="search-input" placeholder="">
+                    <button class="search-submit">Ask AI</button>
+                </div>
+                <div class="search-suggestions">
+                    <button class="suggest-chip">Fix my error</button>
+                    <button class="suggest-chip">Dry run this</button>
+                    <button class="suggest-chip">Optimize code</button>
+                    <button class="suggest-chip">Explain logic</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════
+         HOW IT WORKS — 3 steps
+    ══════════════════════════════════════ -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-container">
+            <h2 class="section-title text-center">From code to clarity in 3 steps</h2>
+            <div class="steps-row">
+
+                <div class="step-card fade-up">
+                    <div class="step-bg-number">1</div>
+                    <div class="step-icon">✍️</div>
+                    <h3 class="step-title">Write</h3>
+                    <p class="step-desc">Open the editor, pick your language, and start writing code.</p>
+                </div>
+
+                <div class="step-connector"></div>
+
+                <div class="step-card fade-up">
+                    <div class="step-bg-number">2</div>
+                    <div class="step-icon">⚡</div>
+                    <h3 class="step-title">Run</h3>
+                    <p class="step-desc">Judge0 compiles it live with direct stdin feeding and instant output.</p>
+                </div>
+
+                <div class="step-connector"></div>
+
+                <div class="step-card fade-up">
+                    <div class="step-bg-number">3</div>
+                    <div class="step-icon">🧠</div>
+                    <h3 class="step-title">Understand</h3>
+                    <p class="step-desc">AI explains errors, traces the dry run, and shows execution complexity.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════
+         PRICING / CTA SECTION
+    ══════════════════════════════════════ -->
+    <section class="cta-section" id="pricing">
+        <div class="cta-container fade-up">
+            <h2>Ready to transform your code?</h2>
+            <p>Join the next generation of engineers using an intelligence-first IDE.</p>
+            <button class="btn-primary btn-large" id="btnBookDemo">Book a Demo</button>
+            <p class="cta-sub">Free for students and open source maintainers.</p>
+        </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════
+         BOOKING MODAL (3-step)
+    ══════════════════════════════════════ -->
+    <div class="modal-overlay" id="bookingModal">
+        <div class="modal-card">
+            <button class="modal-close" id="modalClose">&times;</button>
+
+            <div class="modal-header">
+                <h3>Book a Session</h3>
+                <div class="progress-indicator">
+                    <div class="step-indicator active" id="ind1">1</div>
+                    <div class="step-line"></div>
+                    <div class="step-indicator" id="ind2">2</div>
+                    <div class="step-line"></div>
+                    <div class="step-indicator" id="ind3">3</div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <!-- Step 1: Date -->
+                <div class="modal-step active" id="step1">
+                    <div class="step-label">Select a Date</div>
+                    <div class="calendar-ui" id="calendar"></div>
+                </div>
+
+                <!-- Step 2: Time -->
+                <div class="modal-step" id="step2">
+                    <div class="step-label">Select a Time Slot</div>
+                    <div class="time-grid">
+                        <button class="time-btn">9:00 AM</button>
+                        <button class="time-btn">10:00 AM</button>
+                        <button class="time-btn">11:00 AM</button>
+                        <button class="time-btn">1:00 PM</button>
+                        <button class="time-btn">2:00 PM</button>
+                        <button class="time-btn">4:00 PM</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Details -->
+                <div class="modal-step" id="step3">
+                    <div class="step-label">Your Details</div>
+                    <form class="booking-form" onsubmit="event.preventDefault()">
+                        <input type="text" placeholder="Full Name" required>
+                        <input type="email" placeholder="Email Address" required>
+                        <textarea rows="4" placeholder="Tell us about your use case..." required></textarea>
+                    </form>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-secondary" id="modalBack" style="visibility:hidden">Back</button>
+                <button class="btn-primary" id="modalNext">Next Step</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════
+         LOGIN MODAL
+    ══════════════════════════════════════ -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-card auth-card">
+            <button class="modal-close" id="loginClose">&times;</button>
+
+            <div class="modal-header">
+                <h3>Welcome Back</h3>
+            </div>
+
+            <div class="modal-body">
+                <form class="auth-form" onsubmit="event.preventDefault()">
+                    <input type="email" placeholder="Email Address" required>
+                    <input type="password" placeholder="Password" required>
+                    <a href="#" class="forgot-link">Forgot password?</a>
+                    <button type="submit" class="btn-primary btn-full" id="doLoginBtn">Log In</button>
+                </form>
+
+                <div class="auth-divider"><span>or continue with</span></div>
+
+                <div class="social-btns">
+                    <button class="btn-social">
+                        <!-- Google SVG -->
+                        <svg width="18" height="18" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
+                        </svg>
+                        Google
+                    </button>
+                    <button class="btn-social">
+                        <!-- GitHub SVG -->
+                        <svg width="18" height="18" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                d="M12,2C6.477,2,2,6.477,2,12c0,4.419,2.865,8.166,6.839,9.489c0.5,0.09,0.682-0.218,0.682-0.484c0-0.236-0.009-0.866-0.014-1.699c-2.782,0.602-3.369-1.34-3.369-1.34c-0.454-1.156-1.11-1.462-1.11-1.462c-0.908-0.62,0.069-0.608,0.069-0.608c1.004,0.071,1.532,1.03,1.532,1.03c0.892,1.529,2.341,1.087,2.91,0.831c0.092-0.646,0.35-1.086,0.636-1.336c-2.22-0.253-4.555-1.11-4.555-4.943c0-1.091,0.39-1.984,1.03-2.682C6.546,8.54,6.202,7.524,6.746,6.148c0,0,0.84-0.269,2.75,1.025C10.295,6.95,11.15,6.84,12,6.836c0.85,0.004,1.705,0.114,2.504,0.336c1.909-1.294,2.747-1.025,2.747-1.025c0.546,1.376,0.202,2.394,0.104,2.648c0.64,0.697,1.028,1.591,1.028,2.682c0,3.842-2.338,4.687-4.566,4.935c0.359,0.307,0.679,0.915,0.679,1.846c0,1.332-0.012,2.407-0.012,2.734c0,0.267,0.18,0.577,0.688,0.48C19.138,20.161,22,16.416,22,12C22,6.477,17.523,2,12,2z" />
+                        </svg>
+                        GitHub
+                    </button>
+                </div>
+
+                <div class="auth-footer">
+                    Don't have an account? <a href="#" id="linkToSignUp">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════
+         SIGN UP MODAL (2-step)
+    ══════════════════════════════════════ -->
+    <div class="modal-overlay" id="signupModal">
+        <div class="modal-card auth-card">
+            <button class="modal-close" id="signupClose">&times;</button>
+
+            <div class="modal-header">
+                <h3>Create an Account</h3>
+                <div class="auth-progress">Step <span id="suStepNum">1</span> of 2</div>
+            </div>
+
+            <div class="modal-body">
+
+                <!-- Step 1: credentials -->
+                <div class="signup-step active" id="suStep1">
+                    <form class="auth-form" onsubmit="event.preventDefault()">
+                        <input type="text" placeholder="Full Name" required>
+                        <input type="email" placeholder="Email Address" required>
+                        <input type="password" placeholder="Password" required id="suPassword">
+                        <div class="password-strength">
+                            <div class="strength-bar" id="strengthBar"></div>
+                        </div>
+                        <input type="password" placeholder="Confirm Password" required>
+                        <button type="submit" class="btn-primary btn-full" id="suNextBtn">Continue &rarr;</button>
+                    </form>
+
+                    <div class="auth-divider"><span>or continue with</span></div>
+                    <div class="social-btns">
+                        <button class="btn-social">
+                            <svg width="18" height="18" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
+                            </svg>
+                            Google
+                        </button>
+                        <button class="btn-social">
+                            <svg width="18" height="18" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M12,2C6.477,2,2,6.477,2,12c0,4.419,2.865,8.166,6.839,9.489c0.5,0.09,0.682-0.218,0.682-0.484c0-0.236-0.009-0.866-0.014-1.699c-2.782,0.602-3.369-1.34-3.369-1.34c-0.454-1.156-1.11-1.462-1.11-1.462c-0.908-0.62,0.069-0.608,0.069-0.608c1.004,0.071,1.532,1.03,1.532,1.03c0.892,1.529,2.341,1.087,2.91,0.831c0.092-0.646,0.35-1.086,0.636-1.336c-2.22-0.253-4.555-1.11-4.555-4.943c0-1.091,0.39-1.984,1.03-2.682C6.546,8.54,6.202,7.524,6.746,6.148c0,0,0.84-0.269,2.75,1.025C10.295,6.95,11.15,6.84,12,6.836c0.85,0.004,1.705,0.114,2.504,0.336c1.909-1.294,2.747-1.025,2.747-1.025c0.546,1.376,0.202,2.394,0.104,2.648c0.64,0.697,1.028,1.591,1.028,2.682c0,3.842-2.338,4.687-4.566,4.935c0.359,0.307,0.679,0.915,0.679,1.846c0,1.332-0.012,2.407-0.012,2.734c0,0.267,0.18,0.577,0.688,0.48C19.138,20.161,22,16.416,22,12C22,6.477,17.523,2,12,2z" />
+                            </svg>
+                            GitHub
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: use-case picker -->
+                <div class="signup-step" id="suStep2">
+                    <div class="step-label">What will you use NEXUS for?</div>
+                    <div class="use-cases-grid">
+                        <div class="use-case-card">Competitive Programming</div>
+                        <div class="use-case-card">Learning &amp; Practice</div>
+                        <div class="use-case-card">Interview Prep</div>
+                        <div class="use-case-card">Team / Work Projects</div>
+                    </div>
+                    <button class="btn-primary btn-full" id="suFinishBtn">Finish Setup &rarr;</button>
+                </div>
+
+                <div class="auth-footer" id="suFooter">
+                    Already have an account? <a href="#" id="linkToLogin">Log In</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════
+         FLOATING COMPILER PANEL (corner IDE)
+         — slides in from bottom-right on "Compiler" click
+         — minimize → floating chip, maximize → fullscreen
+    ══════════════════════════════════════ -->
+    <div class="compiler-panel" id="compilerPanel">
+
+        <!-- Panel header bar -->
+        <div class="panel-header">
+            <div class="panel-brand">
+                <span class="logo-dot"></span>
+                <span class="panel-brand-text">NEXUS IDE</span>
+            </div>
+            <div class="panel-controls">
+                <button class="panel-btn" id="panelMaximize" title="Expand">⤢</button>
+                <button class="panel-btn" id="panelMinimize" title="Minimize">&minus;</button>
+                <button class="panel-btn panel-btn-close" id="panelClose" title="Close">&times;</button>
+            </div>
+        </div>
+
+        <!-- Minimized chip label (only visible when .minimized) -->
+        <div class="panel-mini-label">NEXUS IDE ▲</div>
+
+        <!-- IDE iframe -->
+        <div class="panel-body">
+            <iframe id="ideFrame" src="../index.html" class="ide-frame" title="NEXUS IDE"
+                allow="clipboard-write"></iframe>
+        </div>
+
+    </div>
+
+
+    <script src="main.js"></script>
+</body>
+
+</html>

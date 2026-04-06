@@ -1,0 +1,25 @@
+{
+  "name": "draft05",
+  "version": "1.0.0",
+  "description": "this is live compiler analyzer college project for 2nd year of btech",
+  "main": "app.js",
+  "scripts": {
+    "dev": "live-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GRIET-NH/draft05.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/GRIET-NH/draft05/issues"
+  },
+  "homepage": "https://github.com/GRIET-NH/draft05#readme",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

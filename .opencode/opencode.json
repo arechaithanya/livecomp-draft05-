@@ -1,0 +1,10 @@
+{
+  "permission": {
+    "read": {
+      "/Users/chaithanyareddy/Desktop/GRIET/draft05/.opencode/get-shit-done/*": "allow"
+    },
+    "external_directory": {
+      "/Users/chaithanyareddy/Desktop/GRIET/draft05/.opencode/get-shit-done/*": "allow"
+    }
+  }
+}
